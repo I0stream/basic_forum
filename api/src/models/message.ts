@@ -22,11 +22,10 @@ export function MessageFactory(sequelize: Sequelize) {
         message: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true
         },
         threadId: {
           type: DataTypes.INTEGER,
-          allowNull: false
+          allowNull: false,
         },
         userId: {
             type: DataTypes.INTEGER,

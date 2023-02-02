@@ -18,11 +18,10 @@ function MessageFactory(sequelize) {
         message: {
             type: sequelize_1.DataTypes.STRING,
             allowNull: false,
-            unique: true
         },
         threadId: {
             type: sequelize_1.DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
         },
         userId: {
             type: sequelize_1.DataTypes.INTEGER,

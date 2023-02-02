@@ -4,11 +4,10 @@ import { Message } from "./message";
 
 
 export class Thread extends Model<InferAttributes<Thread>, InferCreationAttributes<Thread>>{
-    declare threadId: number;// is post number
+    declare threadId: number;
     declare title: string;
     declare description: string;
     declare userId: number;
-    declare messageIds: [number];
     declare createdAt?: Date;
     declare updatedAt?: Date;
 }
@@ -29,10 +28,6 @@ export function ThreadFactory(sequelize: Sequelize) {
           type: DataTypes.STRING,
           allowNull: false,
       },
-        messageIds: {
-          type: DataTypes.ARRAY(DataTypes.INTEGER),
-          allowNull: true
-        },
         userId: {
             type: DataTypes.INTEGER,
             allowNull: false
@@ -49,13 +44,10 @@ export function ThreadFactory(sequelize: Sequelize) {
         }
     }, {
         freezeTableName: true,
-        tableName: 'messages',
+        tableName: 'threads',
         sequelize
     });
 }
 export function AssociateUserThread() {
-    User.hasMany(Thread, { foreignKey: 'userId' });
-    Thread.hasMany(Message), {foreignKey: 'messageIds'}
     Thread.belongsTo(User, { foreignKey: 'userId' });
-
 }

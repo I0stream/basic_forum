@@ -31,7 +31,7 @@ export const loginUser: RequestHandler = async (req, res, next) => {
       // If passwords match, create a JWT
       if (passwordsMatch) {
           let token = await signUserToken(existingUser);
-          res.status(200).json({ token });
+          res.status(200).json({ "token": token, "userId": existingUser.userId });
       }
       else {
           res.status(401).json('Invalid password');
@@ -43,13 +43,16 @@ export const loginUser: RequestHandler = async (req, res, next) => {
 }
 
 export const getUser: RequestHandler = async (req, res, next) => {
-  let user: User | null = await verifyUser(req);
+
+    req.headers.authorization = `Bearer ${req.body.token}`
+      let user: User | null = await verifyUser(req);
 
   if (user) {
-      let { username, email } = user;
+      let { username, email, userId } = user;
       res.status(200).json({
           username,
-          email
+          email,
+          userId
       });
   }
   else {

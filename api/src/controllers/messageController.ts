@@ -10,26 +10,7 @@ export const getAllMessages: RequestHandler = async (req, res, next) => {
 }
 
 
-/*
-//add to thread too
-
-async function addPostToThread (threadId, messageId){ 
-    
-    let threadFound = await Thread.findByPk(threadId);
-    
-    threadFound?.messageIds.push(messageId)
-
-    if (threadFound && threadFound.threadId == threadId) {
-            await Thread.update(threadFound, {
-                where: { threadId: threadId }
-            });
-            res.status(200).json();
-    }
-    else {
-        res.status(400).json();
-    }
-}*/
-
+//create new message and associate it with its thread
 export const createMessage: RequestHandler = async (req, res, next) => {
   let user: User | null = await verifyUser(req);
 
@@ -38,18 +19,23 @@ export const createMessage: RequestHandler = async (req, res, next) => {
   }
   
   let newMessage: Message = req.body;
+  console.log( "blah blah ", newMessage)
+  newMessage.message = req.body.message;
   newMessage.userId = user.userId;
+  newMessage.threadId = req.body.threadId
   
   if (newMessage.message) {
-      let created = await Message.create(newMessage);
+    let created = await Message.create(newMessage);
 
-
-      res.status(201).json(created);
+    //once the message is created, get thread and add message Id to thread messageids
+    
+    res.status(200).json(created);
   }
-  else {
-      res.status(400).send();
-  }
+    else {
+        res.status(400).json();
+    }
 }
+
 
 export const getMessage: RequestHandler = async (req, res, next) => {
   let messageId = req.params.messageId;
@@ -61,6 +47,32 @@ export const getMessage: RequestHandler = async (req, res, next) => {
       res.status(404).json({});
   }
 }
+
+export const getMessageByThreadId: RequestHandler = async (req, res, next) => {
+  let threadId = req.params.threadId;
+  let messageFound = await Message.findAll({
+    where:{ threadId: threadId }}
+    );
+  if (messageFound) {
+      res.status(200).json(messageFound);
+  }
+  else {
+      res.status(404).json({});
+  }
+}
+export const getMessagesByUserId: RequestHandler = async (req, res, next) => {
+  let userId = req.params.userId;
+  let messageFound = await Message.findAll({
+    where:{ userId: userId }}
+    );
+  if (messageFound) {
+      res.status(200).json(messageFound);
+  }
+  else {
+      res.status(404).json({});
+  }
+}
+
 
 export const updateMessage: RequestHandler = async (req, res, next) => {
   let messageId = req.params.messageId;

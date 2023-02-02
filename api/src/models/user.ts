@@ -6,8 +6,6 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
     declare username: string;
     declare password: string;
     declare email: string;
-    declare messageIds: [number];
-    declare threadIds: [number];
     declare createdAt?: Date;
     declare updatedAt?: Date;
 }
@@ -33,14 +31,6 @@ export function UserFactory(sequelize: Sequelize) {
       password: {
           type: DataTypes.STRING,
           allowNull: false
-      },
-      messageIds:{
-        type:DataTypes.ARRAY(DataTypes.NUMBER),
-        allowNull: true
-      },
-      threadIds:{
-        type:DataTypes.ARRAY(DataTypes.NUMBER),
-        allowNull: true
       },
       createdAt: {
           type: DataTypes.DATE,

@@ -30,7 +30,7 @@ const loginUser = async (req, res, next) => {
         // If passwords match, create a JWT
         if (passwordsMatch) {
             let token = await (0, auth_1.signUserToken)(existingUser);
-            res.status(200).json({ token });
+            res.status(200).json({ "token": token, "userId": existingUser.userId });
         }
         else {
             res.status(401).json('Invalid password');
@@ -42,12 +42,14 @@ const loginUser = async (req, res, next) => {
 };
 exports.loginUser = loginUser;
 const getUser = async (req, res, next) => {
+    req.headers.authorization = `Bearer ${req.body.token}`;
     let user = await (0, auth_1.verifyUser)(req);
     if (user) {
-        let { username, email } = user;
+        let { username, email, userId } = user;
         res.status(200).json({
             username,
-            email
+            email,
+            userId
         });
     }
     else {

@@ -27,14 +27,6 @@ function UserFactory(sequelize) {
             type: sequelize_1.DataTypes.STRING,
             allowNull: false
         },
-        messageIds: {
-            type: sequelize_1.DataTypes.ARRAY(sequelize_1.DataTypes.NUMBER),
-            allowNull: true
-        },
-        threadIds: {
-            type: sequelize_1.DataTypes.ARRAY(sequelize_1.DataTypes.NUMBER),
-            allowNull: true
-        },
         createdAt: {
             type: sequelize_1.DataTypes.DATE,
             allowNull: false,
